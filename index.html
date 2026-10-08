@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartLibrary - Book Availability</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<!-- =========================================================
+     LOGIN PAGE
+========================================================= -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-left">
+
+        <div class="brand login-brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+
+            <div>
+                <h2>SmartLibrary</h2>
+                <span>Book Availability System</span>
+            </div>
+        </div>
+
+        <div class="login-content">
+
+            <span class="small-label">SMART LIBRARY SYSTEM</span>
+
+            <h1>
+                Find your next book
+                <span>before you visit.</span>
+            </h1>
+
+            <p>
+                Search books, check individual copy availability,
+                join a waiting list and know when your book becomes available.
+            </p>
+
+            <div class="login-features">
+
+                <div>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Search books instantly</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Check return dates</span>
+                </div>
+
+                <div>
+                    <i class="fa-solid fa-ticket"></i>
+                    <span>Join a waiting list</span>
+                </div>
+
+                <div>
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>Contact current borrowers</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="login-right">
+
+        <div class="login-card">
+
+            <div class="login-card-icon">
+                <i class="fa-solid fa-book"></i>
+            </div>
+
+            <h2>Welcome back 👋</h2>
+
+            <p>Login to access your library</p>
+
+            <form id="loginForm">
+
+                <label>Email</label>
+
+                <div class="input-box">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required>
+                </div>
+
+                <label>Password</label>
+
+                <div class="input-box">
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required>
+
+                    <i class="fa-regular fa-eye password-eye"
+                       onclick="togglePassword()"></i>
+                </div>
+
+                <div class="login-options">
+
+                    <label class="remember">
+                        <input type="checkbox" checked>
+                        Remember me
+                    </label>
+
+                    <a href="#" onclick="showForgotMessage()">
+                        Forgot password?
+                    </a>
+
+                </div>
+
+                <button class="primary-btn login-btn" type="submit">
+                    Login
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+            </form>
+
+            <div class="demo-login">
+                Demo: enter any email and password
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MAIN APPLICATION
+========================================================= -->
+
+<div id="app" class="app hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-book-open"></i>
+            </div>
+
+            <div>
+                <h2>SmartLibrary</h2>
+                <span>Book Availability</span>
+            </div>
+
+        </div>
+
+
+        <div class="menu-title">LIBRARY</div>
+
+        <nav>
+
+            <button class="nav-item active"
+                    data-page="home"
+                    onclick="showPage('home')">
+
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="browse"
+                    onclick="showPage('browse')">
+
+                <i class="fa-solid fa-book"></i>
+                <span>Browse Books</span>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="saved"
+                    onclick="showPage('saved')">
+
+                <i class="fa-regular fa-heart"></i>
+                <span>Saved Books</span>
+
+                <b id="savedCount" class="menu-badge">0</b>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="waitlist"
+                    onclick="showPage('waitlist')">
+
+                <i class="fa-solid fa-ticket"></i>
+                <span>My Waitlist</span>
+
+                <b id="waitlistCount" class="menu-badge">0</b>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="mybooks"
+                    onclick="showPage('mybooks')">
+
+                <i class="fa-solid fa-book-bookmark"></i>
+                <span>My Books</span>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="notifications"
+                    onclick="showPage('notifications')">
+
+                <i class="fa-regular fa-bell"></i>
+                <span>Notifications</span>
+
+                <b id="notificationCount" class="menu-badge red">2</b>
+
+            </button>
+
+        </nav>
+
+
+        <div class="menu-title account-title">
+            ACCOUNT
+        </div>
+
+        <nav>
+
+            <button class="nav-item"
+                    data-page="profile"
+                    onclick="showPage('profile')">
+
+                <i class="fa-regular fa-user"></i>
+                <span>My Profile</span>
+
+            </button>
+
+
+            <button class="nav-item"
+                    data-page="settings"
+                    onclick="showPage('settings')">
+
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+
+            </button>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="user-mini">
+
+                <div class="avatar">K</div>
+
+                <div>
+                    <strong id="sidebarName">Kanishka B6906</strong>
+                    <span>Library Member</span>
+                </div>
+
+            </div>
+
+
+            <button class="logout-btn" onclick="logout()">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="mobile-logo">
+                <i class="fa-solid fa-book-open"></i>
+                SmartLibrary
+            </div>
+
+
+            <div class="global-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="globalSearch"
+                    placeholder="Search books, authors, ISBN..."
+                    onkeyup="globalSearchBooks(event)">
+
+            </div>
+
+
+            <div class="top-right">
+
+                <button class="notification-icon"
+                        onclick="showPage('notifications')">
+
+                    <i class="fa-regular fa-bell"></i>
+                    <span></span>
+
+                </button>
+
+
+                <div class="top-user">
+
+                    <div class="avatar">K</div>
+
+                    <div>
+                        <strong>Kanishka B6906</strong>
+                        <small>Library Member</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             HOME PAGE
+        ================================================= -->
+
+        <section id="home" class="page active-page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">LIBRARY DASHBOARD</span>
+
+                    <h1>Good morning, Kanishka 👋</h1>
+
+                    <p>
+                        Find your books before you visit the library.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- BIG SEARCH -->
+
+            <div class="hero-search">
+
+                <div>
+                    <span>What are you looking for?</span>
+
+                    <h2>
+                        Find a book in seconds.
+                    </h2>
+                </div>
+
+                <div class="hero-search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        id="homeSearch"
+                        type="text"
+                        placeholder="Search by title, author or ISBN..."
+                        onkeyup="homeSearchBooks(event)">
+
+                    <button onclick="performHomeSearch()">
+                        Search
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+
+                    <div>
+                        <span>Total Books</span>
+                        <strong>12,458</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Available Copies</span>
+                        <strong>8,921</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+
+                    <div>
+                        <span>Currently Issued</span>
+                        <strong>3,537</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        <i class="fa-solid fa-ticket"></i>
+                    </div>
+
+                    <div>
+                        <span>My Waitlists</span>
+                        <strong id="homeWaitlistNumber">0</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- POPULAR BOOKS -->
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="small-label">TRENDING</span>
+                    <h2>Popular Books</h2>
+                </div>
+
+                <button class="text-btn" onclick="showPage('browse')">
+                    View all
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+            </div>
+
+
+            <div id="popularBooks" class="book-grid"></div>
+
+
+            <!-- ACTIVE ALERT -->
+
+            <div class="section-heading alert-heading">
+
+                <div>
+                    <span class="small-label">YOUR ACTIVITY</span>
+                    <h2>Active Alerts</h2>
+                </div>
+
+                <button class="text-btn"
+                        onclick="showPage('waitlist')">
+
+                    View waitlist
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+
+            <div id="homeAlerts" class="alerts-container"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             BROWSE PAGE
+        ================================================= -->
+
+        <section id="browse" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">LIBRARY COLLECTION</span>
+
+                    <h1>Browse Books</h1>
+
+                    <p>
+                        Search and check the availability of every copy.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="filter-bar">
+
+                <div class="browse-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="browseSearch"
+                        placeholder="Search title, author or ISBN..."
+                        oninput="renderBooks()">
+
+                </div>
+
+
+                <select id="categoryFilter"
+                        onchange="renderBooks()">
+
+                    <option value="all">All Categories</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="technology">Technology</option>
+                    <option value="education">Education</option>
+                    <option value="self-help">Self Help</option>
+                    <option value="fantasy">Fantasy</option>
+
+                </select>
+
+
+                <select id="availabilityFilter"
+                        onchange="renderBooks()">
+
+                    <option value="all">All Availability</option>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
+
+                </select>
+
+            </div>
+
+
+            <div id="browseBooks" class="book-grid large-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             BOOK DETAILS PAGE
+        ================================================= -->
+
+        <section id="bookDetails" class="page">
+
+            <button class="back-btn"
+                    onclick="showPage('browse')">
+
+                <i class="fa-solid fa-arrow-left"></i>
+                Back to books
+
+            </button>
+
+
+            <div id="bookDetailsContent"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             SAVED BOOKS
+        ================================================= -->
+
+        <section id="saved" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">YOUR COLLECTION</span>
+
+                    <h1>Saved Books ❤️</h1>
+
+                    <p>
+                        Books you want to keep track of.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div id="savedBooks" class="book-grid"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             WAITLIST PAGE
+        ================================================= -->
+
+        <section id="waitlist" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">QUEUE MANAGEMENT</span>
+
+                    <h1>My Waitlist 🎫</h1>
+
+                    <p>
+                        Track books that are currently unavailable.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-banner">
+
+                <div class="info-banner-icon">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+
+                <div>
+
+                    <strong>How the waitlist works</strong>
+
+                    <p>
+                        When all copies of a book are borrowed,
+                        join the queue. When a copy is returned,
+                        people in the queue are notified.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="waitlistContainer"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             MY BOOKS
+        ================================================= -->
+
+        <section id="mybooks" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">YOUR READING</span>
+
+                    <h1>My Books 📖</h1>
+
+                    <p>
+                        Books currently borrowed by you.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="my-book-card">
+
+                <div class="my-book-cover cover-blue">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+
+                <div class="my-book-info">
+
+                    <span class="book-category">
+                        TECHNOLOGY
+                    </span>
+
+                    <h2>Clean Code</h2>
+
+                    <p>Robert C. Martin</p>
+
+                    <div class="due-info">
+
+                        <span>
+                            <i class="fa-regular fa-calendar"></i>
+                            Due date
+                        </span>
+
+                        <strong>October 15, 2026</strong>
+
+                    </div>
+
+                </div>
+
+                <div class="book-status green-status">
+                    Borrowed
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NOTIFICATIONS
+        ================================================= -->
+
+        <section id="notifications" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">UPDATES</span>
+
+                    <h1>Notifications 🔔</h1>
+
+                    <p>
+                        Stay updated about your books.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div id="notificationsContainer"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             PROFILE
+        ================================================= -->
+
+        <section id="profile" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">ACCOUNT</span>
+
+                    <h1>My Profile</h1>
+
+                    <p>
+                        Your library membership details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">K</div>
+
+                <div class="profile-main">
+
+                    <h2>Kanishka B6906</h2>
+
+                    <p>Library Member</p>
+
+                    <div class="profile-details">
+
+                        <div>
+                            <span>Email</span>
+                            <strong>kanishka@example.com</strong>
+                        </div>
+
+                        <div>
+                            <span>Member ID</span>
+                            <strong>B6906</strong>
+                        </div>
+
+                        <div>
+                            <span>Member Since</span>
+                            <strong>2025</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SETTINGS
+        ================================================= -->
+
+        <section id="settings" class="page">
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="small-label">PREFERENCES</span>
+
+                    <h1>Settings</h1>
+
+                    <p>
+                        Manage your notification preferences.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="setting-row">
+
+                    <div>
+                        <strong>Availability alerts</strong>
+                        <p>Notify me when a waited book becomes available.</p>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <strong>Return reminders</strong>
+                        <p>Remind me before my borrowed books are due.</p>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <strong>Waitlist updates</strong>
+                        <p>Notify me about my position in the queue.</p>
+                    </div>
+
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div id="modalOverlay" class="modal-overlay hidden">
+
+    <div class="modal">
+
+        <button class="modal-close"
+                onclick="closeModal()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+        <div id="modalContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast" class="toast">
+
+    <i class="fa-solid fa-circle-check"></i>
+
+    <span id="toastMessage">
+        Done
+    </span>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
